@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>X PM 1 — Ruang Kelas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1C2541;
+    --paper:#FBF7EF;
+    --paper-soft:#F3EEE1;
+    --coral:#E8622C;
+    --gold:#D9A441;
+    --sage:#4C7A6A;
+    --blue:#2E5EC4;
+    --line:#D8D2C4;
+    --white:#FFFFFF;
+    --radius-tag: 3px;
+    --maxw: 1080px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    margin:0;
+    color:var(--ink);
+  }
+  a{color:inherit;}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px;}
+  img,svg{display:block;}
+
+  /* ---- NAV ---- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(251,247,239,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  header::after{
+    content:"";
+    display:block; height:4px; width:100%;
+    background:linear-gradient(90deg, var(--coral), var(--gold), var(--sage), var(--blue));
+  }
+  nav.wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    padding-top:14px; padding-bottom:14px;
+  }
+  .brandmark{
+    display:flex; align-items:center; gap:9px;
+    font-family:'Fraunces', serif; font-weight:700; font-size:1.25rem;
+    letter-spacing:-0.01em;
+  }
+  .brandmark .dot{
+    width:14px; height:14px; border-radius:50%;
+    background:conic-gradient(var(--coral), var(--gold), var(--sage), var(--blue), var(--coral));
+    flex-shrink:0;
+  }
+  .brandmark .tag{
+    font-family:'Work Sans', sans-serif; font-weight:600; font-size:0.6rem;
+    background:var(--coral); color:var(--white);
+    padding:2px 6px; border-radius:var(--radius-tag);
+    position:relative; top:-2px;
+  }
+  .navlinks{display:flex; gap:26px; list-style:none; margin:0; padding:0;}
+  .navlinks a{
+    text-decoration:none; font-size:0.92rem; font-weight:500;
+    padding-bottom:3px; border-bottom:2px solid transparent;
+    transition:border-color .15s ease;
+  }
+  .navlinks a:hover{border-color:var(--coral);}
+  .navtoggle{display:none; background:none; border:none; cursor:pointer;}
+  .navtoggle svg{width:24px; height:24px;}
+
+  @media (max-width:760px){
+    .navlinks{
+      position:absolute; top:100%; left:0; right:0;
+      flex-direction:column; gap:0;
+      background:var(--paper); border-bottom:1px solid var(--line);
+      max-height:0; overflow:hidden; padding:0 24px;
+      transition:max-height .25s ease, padding .25s ease;
+    }
+    .navlinks.open{max-height:340px; padding:10px 24px 18px;}
+    .navlinks a{display:block; padding:9px 0; border-bottom:1px solid var(--line);}
+    .navtoggle{display:block;}
+  }
+
+  /* ---- HERO ---- */
+  .hero{padding:48px 0 40px; position:relative;}
+
+  .welcome-poster{
+    position:relative;
+    background: linear-gradient(135deg, #C23B22, var(--coral));
+    border-radius:28px;
+    padding:34px 22px;
+    margin-bottom:34px;
+    box-shadow: 0 18px 40px -20px rgba(28,37,65,0.45);
+  }
+  .poster-inner{
+    position:relative; z-index:2;
+    background:var(--paper);
+    border:5px solid var(--ink);
+    border-radius:16px;
+    padding:38px 20px;
+    text-align:center;
+  }
+  .poster-eyebrow{
+    display:block; font-weight:600; color:var(--sage);
+    font-size:0.82rem; margin-bottom:10px;
+  }
+  .poster-title{
+    font-family:'Fraunces', serif; font-weight:700;
+    font-size:clamp(2.2rem, 9vw, 4rem);
+    line-height:1.12; letter-spacing:-0.01em;
+    color:var(--gold); -webkit-text-stroke:2.5px var(--ink);
+    paint-order:stroke fill; margin:0;
+  }
+  .poster-title .pm1{color:var(--paper); -webkit-text-stroke:2.5px var(--ink);}
+
+  .deco{position:absolute; z-index:1; filter:drop-shadow(0 4px 6px rgba(0,0,0,0.15));}
+  .deco-star-tl{width:64px; top:-22px; left:-14px; transform:rotate(-12deg);}
+  .deco-rocket-tr{width:56px; top:-30px; right:6px; transform:rotate(18deg);}
+  .deco-blob-bl{width:76px; bottom:-26px; left:14px; transform:rotate(-6deg);}
+  .deco-star-br{width:46px; bottom:-16px; right:-10px; transform:rotate(10deg);}
+  @media (max-width:600px){
+    .deco-rocket-tr{width:42px; top:-22px;}
+    .deco-blob-bl{width:56px; bottom:-18px;}
+    .deco-star-br{display:none;}
+  }
+
+  .hero p.lede{
+    max-width:520px; font-size:1.08rem; margin-top:22px; color:#40465f;
+  }
+  .stat-row{
+    display:flex; flex-wrap:wrap; gap:0; margin-top:40px;
+    border-top:1px solid var(--line);
+  }
+  .stat{
+    flex:1 1 160px; padding:16px 18px 16px 0; border-right:1px solid var(--line);
+  }
+  .stat:last-child{border-right:none;}
+  .stat .num{font-family:'Fraunces', serif; font-size:1.6rem; font-weight:600;}
+  .stat .label{font-size:0.82rem; color:#6b7086; margin-top:2px;}
+
+  /* ---- SECTION SHELL ---- */
+  section{padding:64px 0;}
+  section + section{border-top:1px solid var(--line);}
+  .sec-head{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    gap:20px; margin-bottom:32px; flex-wrap:wrap;
+  }
+  .sec-head h2{font-size:2rem; letter-spacing:-0.01em; max-width:480px; display:flex; align-items:center; gap:12px;}
+  .sec-head .note{font-size:0.92rem; color:#6b7086; max-width:300px;}
+  .icon-badge{
+    width:38px; height:38px; border-radius:10px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .icon-badge svg{width:20px; height:20px;}
+
+  /* ---- PROFIL ---- */
+  .profil-grid{display:grid; grid-template-columns:1.1fr 1fr; gap:44px;}
+  @media (max-width:760px){.profil-grid{grid-template-columns:1fr;}}
+  .profil-grid.single{grid-template-columns:1fr; max-width:560px;}
+  .motto-card{
+    background:var(--ink); color:var(--paper); padding:30px 28px; border-radius:6px;
+    position:relative; overflow:hidden;
+    background-image:
+      radial-gradient(circle at 92% 8%, rgba(217,164,65,0.18) 0, transparent 40%),
+      radial-gradient(circle at 6% 96%, rgba(232,98,44,0.16) 0, transparent 40%);
+  }
+  .motto-card .kicker{color:var(--gold); font-size:0.82rem; font-weight:600; margin-bottom:10px; display:block;}
+  .motto-card h3{color:var(--paper); font-size:1.5rem; font-style:italic; font-weight:500; line-height:1.35;}
+  .motto-card p{margin-top:14px; color:#c9cee0; font-size:0.94rem;}
+  .walikelas{margin-top:22px; display:flex; gap:14px; align-items:center;}
+  .avatar-mini{
+    width:44px; height:44px; border-radius:50%; background:var(--coral);
+    color:#fff; display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces',serif; font-weight:700; font-size:1.1rem; flex-shrink:0;
+  }
+  .walikelas .name{font-weight:600; font-size:0.95rem;}
+  .walikelas .role{font-size:0.82rem; color:#6b7086;}
+
+  /* ---- SCHEDULE TABS ---- */
+  .day-tabs{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:22px;}
+  .day-tab{
+    border:1px solid var(--line); background:var(--white); color:var(--ink);
+    padding:9px 18px; border-radius:20px; font-family:'Work Sans',sans-serif;
+    font-size:0.9rem; font-weight:500; cursor:pointer; transition:all .15s ease;
+  }
+  .day-tab:hover{border-color:var(--coral);}
+  .day-tab.active{background:linear-gradient(120deg, var(--coral), var(--gold)); border-color:transparent; color:var(--white); box-shadow:0 4px 10px -4px rgba(232,98,44,0.5);}
+
+  table.jadwal{width:100%; border-collapse:collapse; font-size:0.94rem;}
+  table.jadwal thead th{
+    text-align:left; font-weight:600; font-size:0.78rem; color:#6b7086;
+    padding:0 0 10px; border-bottom:1px solid var(--ink);
+  }
+  table.jadwal tbody td{
+    padding:14px 8px; border-bottom:1px solid var(--line); vertical-align:top;
+  }
+  table.jadwal tbody tr.istirahat td{
+    color:#9a9fb0; font-style:italic; font-size:0.88rem; padding:9px 8px;
+  }
+  table.jadwal tbody td.waktu{white-space:nowrap; font-weight:600; color:var(--sage); width:130px;}
+  table.jadwal tbody td.mapel{font-weight:600;}
+  table.jadwal tbody td.guru{color:#6b7086;}
+  .jadwal-panel{display:none;}
+  .jadwal-panel.active{display:block; animation:fade .25s ease;}
+  @keyframes fade{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
+
+  /* ---- PIKET ---- */
+  .piket-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:14px;}
+  @media (max-width:900px){.piket-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:520px){.piket-grid{grid-template-columns:1fr;}}
+  .piket-card{
+    border:1px solid var(--line); border-radius:6px; overflow:hidden; background:var(--white);
+  }
+  .piket-card .day-flag{
+    color:#fff; padding:10px 14px;
+    font-weight:600; font-size:0.92rem; font-family:'Fraunces',serif;
+  }
+  .piket-card ul{list-style:none; margin:0; padding:12px 14px; font-size:0.88rem;}
+  .piket-card li{padding:5px 0; border-bottom:1px dashed var(--line);}
+  .piket-card li:last-child{border-bottom:none;}
+  .piket-task{padding:12px 14px 14px; font-size:0.78rem; color:#6b7086; border-top:1px solid var(--paper-soft); background:var(--paper-soft);}
+
+  /* ---- TUGAS / PR ---- */
+  .tugas-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:18px;}
+  @media (max-width:760px){.tugas-grid{grid-template-columns:1fr;}}
+  .tugas-card{
+    background:var(--white); border:1px solid var(--line); border-radius:6px;
+    padding:20px 22px; position:relative;
+  }
+  .tugas-card .top-row{display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:10px;}
+  .tugas-card .mapel-tag{
+    font-size:0.78rem; font-weight:600; color:var(--coral);
+  }
+  .tugas-card .deadline{
+    font-size:0.76rem; font-weight:600; background:var(--paper-soft);
+    padding:4px 9px; border-radius:20px; white-space:nowrap; color:var(--ink);
+  }
+  .tugas-card h3{font-size:1.08rem; font-weight:600; font-family:'Work Sans',sans-serif; line-height:1.4;}
+  .tugas-card .guru-line{margin-top:10px; font-size:0.82rem; color:#6b7086;}
+
+  /* ---- AGENDA ---- */
+  .agenda-list{border-top:1px solid var(--line);}
+  .agenda-item{
+    display:flex; gap:22px; padding:18px 0; border-bottom:1px solid var(--line);
+  }
+  .agenda-item .date{
+    min-width:96px; font-weight:600; color:var(--sage); font-size:0.9rem;
+  }
+  .agenda-item .desc h3{font-size:1rem; font-weight:600; font-family:'Work Sans',sans-serif;}
+  .agenda-item .desc p{margin:4px 0 0; font-size:0.88rem; color:#6b7086;}
+
+  /* ---- CONTACT / FOOTER ---- */
+  .kontak-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
+  @media (max-width:760px){.kontak-grid{grid-template-columns:1fr;}}
+  .kontak-card{border:1px solid var(--line); border-top:4px solid var(--coral); border-radius:6px; padding:20px; background:var(--white);}
+  .kontak-card:nth-child(2){border-top-color:var(--blue);}
+  .kontak-card:nth-child(3){border-top-color:var(--sage);}
+  .kontak-card .label{font-size:0.78rem; color:var(--sage); font-weight:600; margin-bottom:6px;}
+  .kontak-card .val{font-weight:600; font-size:1rem;}
+  a.kontak-card .val{display:block;}
+  .kontak-card a.val{color:var(--coral); text-decoration:none;}
+  .kontak-card a.val:hover{text-decoration:underline;}
+  .kontak-card .sub{font-size:0.82rem; color:#6b7086; margin-top:3px;}
+
+  footer{padding:44px 0 50px; text-align:center; background:var(--ink);}
+  footer .line{padding-top:0; font-size:0.9rem; color:var(--paper); font-family:'Fraunces',serif; font-weight:600;}
+  footer .edit-note{
+    margin-top:8px; font-size:0.78rem; color:#9aa0c2;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <div class="brandmark"><span class="dot" aria-hidden="true"></span>X PM 1 <span class="tag">SMK</span></div>
+    <ul class="navlinks" id="navlinks">
+      <li><a href="#profil">Profil</a></li>
+      <li><a href="#jadwal">Jadwal</a></li>
+      <li><a href="#piket">Piket</a></li>
+      <li><a href="#kontak">Kontak</a></li>
+    </ul>
+    <button class="navtoggle" id="navtoggle" aria-label="Buka menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="welcome-poster">
+      <svg class="deco deco-star-tl" viewBox="0 0 100 100" aria-hidden="true">
+        <polygon points="50,4 61,35 94,35 68,55 78,88 50,68 22,88 32,55 6,35 39,35"
+          fill="var(--gold)" stroke="var(--ink)" stroke-width="4" stroke-linejoin="round"/>
+        <circle cx="50" cy="50" r="10" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/>
+      </svg>
+      <svg class="deco deco-rocket-tr" viewBox="0 0 100 140" aria-hidden="true">
+        <path d="M50 6 C68 24 74 54 70 86 L30 86 C26 54 32 24 50 6 Z" fill="var(--paper)" stroke="var(--ink)" stroke-width="4"/>
+        <circle cx="50" cy="46" r="12" fill="var(--sage)" stroke="var(--ink)" stroke-width="4"/>
+        <path d="M30 70 L8 96 L30 90 Z" fill="var(--coral)" stroke="var(--ink)" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M70 70 L92 96 L70 90 Z" fill="var(--coral)" stroke="var(--ink)" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M38 86 L62 86 L56 118 L44 118 Z" fill="var(--gold)" stroke="var(--ink)" stroke-width="4" stroke-linejoin="round"/>
+      </svg>
+      <svg class="deco deco-blob-bl" viewBox="0 0 120 120" aria-hidden="true">
+        <ellipse cx="36" cy="30" rx="14" ry="20" fill="var(--sage)" stroke="var(--ink)" stroke-width="4"/>
+        <ellipse cx="80" cy="30" rx="14" ry="20" fill="var(--sage)" stroke="var(--ink)" stroke-width="4"/>
+        <circle cx="60" cy="66" r="46" fill="var(--sage)" stroke="var(--ink)" stroke-width="4"/>
+        <circle cx="46" cy="60" r="6" fill="var(--ink)"/>
+        <circle cx="74" cy="60" r="6" fill="var(--ink)"/>
+        <path d="M46 78 Q60 90 74 78" fill="none" stroke="var(--ink)" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+      <svg class="deco deco-star-br" viewBox="0 0 100 100" aria-hidden="true">
+        <polygon points="50,8 60,36 90,36 66,54 75,84 50,66 25,84 34,54 10,36 40,36"
+          fill="var(--coral)" stroke="var(--ink)" stroke-width="4" stroke-linejoin="round"/>
+      </svg>
+
+      <div class="poster-inner">
+        <span class="poster-eyebrow">Kelas X Pemasaran 1 · Tahun Ajaran 2025/2026</span>
+        <h1 class="poster-title">Selamat datang di<br><span class="pm1">X PM 1</span></h1>
+      </div>
+    </div>
+
+    <p class="lede">Ruang informasi kelas X PM 1: jadwal pelajaran dan jadwal piket — semua ada di sini biar nggak ada lagi alasan “lupa”.</p>
+    <div class="stat-row">
+      <div class="stat"><div class="num" style="color:var(--coral);">32</div><div class="label">Siswa aktif</div></div>
+      <div class="stat"><div class="num" style="color:var(--gold);">12</div><div class="label">Mata pelajaran</div></div>
+      <div class="stat"><div class="num" style="color:var(--sage);">5</div><div class="label">Hari efektif</div></div>
+      <div class="stat"><div class="num" style="color:var(--blue);">Bu Resi</div><div class="label">Wali kelas</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="profil">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2><span class="icon-badge" style="background:var(--gold);"><svg viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.6 1.4 6.8L12 17l-6.1 3.5 1.4-6.8L2.2 9.1l6.9-.8L12 2z"/></svg></span>Profil kelas</h2>
+      <p class="note">Motto, wali kelas, dan siapa saja yang pegang kendali di X PM 1.</p>
+    </div>
+    <div class="profil-grid single">
+      <div class="motto-card">
+        <span class="kicker">Motto kelas</span>
+        <h3>“Pintar Memasarkan, Percaya diri Melangkah.”</h3>
+        <p>X PM 1 percaya jurusan Pemasaran bukan cuma soal jualan barang — tapi soal berani ngomong, berani beride, dan kompak sebagai satu tim.</p>
+      </div>
+      <div class="walikelas">
+        <div class="avatar-mini">RY</div>
+        <div>
+          <div class="name">Resi Dwi Yurianti, S.Pd.</div>
+          <div class="role">Wali kelas X PM 1</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="jadwal">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2><span class="icon-badge" style="background:var(--blue);"><svg viewBox="0 0 24 24" fill="none" stroke="var(--paper)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span>Jadwal pelajaran</h2>
+      <p class="note">Senin sampai Jumat, lengkap dengan nama guru pengampu.</p>
+    </div>
+    <div class="day-tabs" id="jadwal-tabs">
+      <button class="day-tab active" data-day="senin">Senin</button>
+      <button class="day-tab" data-day="selasa">Selasa</button>
+      <button class="day-tab" data-day="rabu">Rabu</button>
+      <button class="day-tab" data-day="kamis">Kamis</button>
+      <button class="day-tab" data-day="jumat">Jumat</button>
+    </div>
+
+    <div class="jadwal-panel active" data-panel="senin">
+      <table class="jadwal">
+        <thead><tr><th>Waktu</th><th>Mata pelajaran</th><th>Guru</th></tr></thead>
+        <tbody>
+          <tr class="istirahat"><td colspan="3">06.30–07.00 · Pembiasaan</td></tr>
+          <tr><td class="waktu">07.00–08.20</td><td class="mapel">Upacara bendera</td><td class="guru">—</td></tr>
+          <tr><td class="waktu">08.20–09.20</td><td class="mapel">Bahasa Indonesia</td><td class="guru">Resi Dwi Yurianti, S.Pd.</td></tr>
+          <tr class="istirahat"><td colspan="3">09.20–09.40 · Istirahat</td></tr>
+          <tr><td class="waktu">09.40–10.10</td><td class="mapel">Bahasa Indonesia</td><td class="guru">Resi Dwi Yurianti, S.Pd.</td></tr>
+          <tr><td class="waktu">10.10–11.40</td><td class="mapel">Matematika</td><td class="guru">Bu Agnia</td></tr>
+          <tr class="istirahat"><td colspan="3">11.40–12.30 · Shalat Dzuhur berjamaah</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="jadwal-panel" data-panel="selasa">
+      <table class="jadwal">
+        <thead><tr><th>Waktu</th><th>Mata pelajaran</th><th>Guru</th></tr></thead>
+        <tbody>
+          <tr class="istirahat"><td colspan="3">06.30–07.00 · Pembiasaan</td></tr>
+          <tr><td class="waktu">07.00–08.00</td><td class="mapel">PJOK</td><td class="guru">Pa Taufik</td></tr>
+          <tr><td class="waktu">08.00–09.00</td><td class="mapel">IPAS</td><td class="guru">Bu Rostiane</td></tr>
+          <tr class="istirahat"><td colspan="3">09.00–09.20 · Istirahat</td></tr>
+          <tr><td class="waktu">09.20–10.20</td><td class="mapel">Sejarah</td><td class="guru">Pa Iyus</td></tr>
+          <tr><td class="waktu">10.20–11.20</td><td class="mapel">Produktif Pemasaran</td><td class="guru">Pa Ken</td></tr>
+          <tr class="istirahat"><td colspan="3">11.20–12.30 · Shalat Dzuhur berjamaah</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="jadwal-panel" data-panel="rabu">
+      <table class="jadwal">
+        <thead><tr><th>Waktu</th><th>Mata pelajaran</th><th>Guru</th></tr></thead>
+        <tbody>
+          <tr class="istirahat"><td colspan="3">06.30–07.00 · Pembiasaan</td></tr>
+          <tr><td class="waktu">07.00–08.30</td><td class="mapel">Produktif Pemasaran</td><td class="guru">Pa Hidayat</td></tr>
+          <tr><td class="waktu">08.30–09.00</td><td class="mapel">Bimbingan Konseling</td><td class="guru">—</td></tr>
+          <tr class="istirahat"><td colspan="3">09.00–09.20 · Istirahat</td></tr>
+          <tr><td class="waktu">09.20–11.20</td><td class="mapel">Produktif Pemasaran</td><td class="guru">Bu Ken</td></tr>
+          <tr class="istirahat"><td colspan="3">11.20–12.30 · Shalat Dzuhur berjamaah</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="jadwal-panel" data-panel="kamis">
+      <table class="jadwal">
+        <thead><tr><th>Waktu</th><th>Mata pelajaran</th><th>Guru</th></tr></thead>
+        <tbody>
+          <tr class="istirahat"><td colspan="3">06.30–07.00 · Pembiasaan</td></tr>
+          <tr><td class="waktu">07.00–08.00</td><td class="mapel">Bahasa Inggris</td><td class="guru">Miss Silmi</td></tr>
+          <tr><td class="waktu">08.00–09.00</td><td class="mapel">PKN</td><td class="guru">Bu Ema</td></tr>
+          <tr class="istirahat"><td colspan="3">09.00–09.20 · Istirahat</td></tr>
+          <tr><td class="waktu">09.20–10.20</td><td class="mapel">Pendidikan Agama dan Budi Pekerti</td><td class="guru">Pa Nanang</td></tr>
+          <tr><td class="waktu">10.20–11.20</td><td class="mapel">Bahasa Sunda</td><td class="guru">Pa Ilham</td></tr>
+          <tr class="istirahat"><td colspan="3">11.20–12.30 · Shalat Dzuhur berjamaah</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="jadwal-panel" data-panel="jumat">
+      <table class="jadwal">
+        <thead><tr><th>Waktu</th><th>Mata pelajaran</th><th>Guru</th></tr></thead>
+        <tbody>
+          <tr class="istirahat"><td colspan="3">06.30–08.00 · Pengajian Jumat</td></tr>
+          <tr><td class="waktu">08.00–09.00</td><td class="mapel">Coding</td><td class="guru">Pa Cecep</td></tr>
+          <tr class="istirahat"><td colspan="3">09.00–09.20 · Istirahat</td></tr>
+          <tr><td class="waktu">09.20–10.20</td><td class="mapel">IPAS</td><td class="guru">Bu Roatiane</td></tr>
+          <tr><td class="waktu">10.20–11.20</td><td class="mapel">Seni Tari</td><td class="guru">Bu Bella</td></tr>
+          <tr class="istirahat"><td colspan="3">11.20–13.00 · Shalat Dzuhur berjamaah</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="piket">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2><span class="icon-badge" style="background:var(--sage);"><svg viewBox="0 0 24 24" fill="none" stroke="var(--paper)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l6-6"/><path d="M13 5l6 6-8.5 2.5L8 11z"/><path d="M13 5l2-2"/></svg></span>Jadwal piket</h2>
+      <p class="note">Satu kelompok bertugas penuh satu hari, gantian tiap hari.</p>
+    </div>
+    <div class="piket-grid">
+      <div class="piket-card">
+        <div class="day-flag" style="background:var(--coral);">Senin</div>
+        <ul>
+          <li>Wandi</li><li>Annisa</li><li>Maesya</li><li>Safitri</li>
+          <li>Rhegy</li><li>Rizka</li><li>Putra</li>
+        </ul>
+        <div class="piket-task">Menyapu, mengepel, hapus papan tulis</div>
+      </div>
+      <div class="piket-card">
+        <div class="day-flag" style="background:var(--gold);">Selasa</div>
+        <ul>
+          <li>Adi</li><li>M. Fadil</li><li>Rangga</li>
+          <li>Alipiya</li><li>Revan</li><li>Anita</li>
+        </ul>
+        <div class="piket-task">Merapikan meja-kursi, buang sampah</div>
+      </div>
+      <div class="piket-card">
+        <div class="day-flag" style="background:var(--sage);">Rabu</div>
+        <ul>
+          <li>Dian</li><li>Al</li><li>Akmal</li>
+          <li>Sabilia</li><li>Geisha</li><li>Dik</li>
+        </ul>
+        <div class="piket-task">Menyiram tanaman, bersihkan jendela</div>
+      </div>
+      <div class="piket-card">
+        <div class="day-flag" style="background:var(--blue);">Kamis</div>
+        <ul>
+          <li>Anwar</li><li>Riki</li><li>Akbar</li><li>Yusuf</li>
+          <li>Meysa</li><li>Putri</li><li>Feliska</li>
+        </ul>
+        <div class="piket-task">Menyapu, rapikan sudut baca kelas</div>
+      </div>
+      <div class="piket-card">
+        <div class="day-flag" style="background:var(--ink);">Jumat</div>
+        <ul>
+          <li>Haikal</li><li>Rizwal</li><li>Della</li><li>Wulan</li>
+          <li>Khalistya</li><li>Siti</li><li>Syifa</li>
+        </ul>
+        <div class="piket-task">Bersih-bersih besar sebelum akhir pekan</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="kontak">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2><span class="icon-badge" style="background:var(--coral);"><svg viewBox="0 0 24 24" fill="none" stroke="var(--paper)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H8l-5 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span>Kontak</h2>
+      <p class="note">Butuh info cepat? Hubungi salah satu dari ini.</p>
+    </div>
+    <div class="kontak-grid">
+      <div class="kontak-card">
+        <div class="label">Wali kelas</div>
+        <div class="val">Resi Dwi Yurianti, S.Pd.</div>
+        <div class="sub">Tersedia di ruang guru saat jam istirahat</div>
+        <a class="sub" href="https://wa.me/6282254329669" target="_blank" rel="noopener" style="color:var(--coral); font-weight:600; display:block; margin-top:6px;">+62 822-5432-9669</a>
+      </div>
+      <div class="kontak-card">
+        <div class="label">Ketua kelas</div>
+        <div class="val">Muhammad Rizki</div>
+        <div class="sub">Koordinasi tugas kelompok &amp; piket</div>
+        <a class="sub" href="https://wa.me/6282115144862" target="_blank" rel="noopener" style="color:var(--coral); font-weight:600; display:block; margin-top:6px;">+62 821-1514-4862</a>
+      </div>
+      <div class="kontak-card">
+        <div class="label">Saluran kelas</div>
+        <a class="val" href="https://whatsapp.com/channel/0029Vb8IPlF0lwgnssSyn01o" target="_blank" rel="noopener">Ikuti Saluran WhatsApp X PM 1</a>
+        <div class="sub">Info resmi &amp; pengumuman satu arah dari kelas</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="line">X PM 1 · Tahun Ajaran 2025/2026</div>
+    <div class="edit-note">Semua nama &amp; jadwal di atas contoh — tinggal bilang ke saya data aslinya, nanti langsung diganti.</div>
+  </div>
+</footer>
+
+<script>
+  // Mobile nav toggle
+  const navToggle = document.getElementById('navtoggle');
+  const navLinks = document.getElementById('navlinks');
+  navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  // Jadwal day tabs
+  const tabs = document.querySelectorAll('#jadwal-tabs .day-tab');
+  const panels = document.querySelectorAll('.jadwal-panel');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.querySelector(`.jadwal-panel[data-panel="${tab.dataset.day}"]`).classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
